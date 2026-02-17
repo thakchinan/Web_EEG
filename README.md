@@ -277,7 +277,7 @@ flutter run -d chrome
 
 | Role | Name |
 |------|------|
-| **Developer** | Thakchinan |
+| **Developer** | Thakchinan,Peeniti,Kittisak,Pisit |
 
 ---
 
