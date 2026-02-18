@@ -66,6 +66,7 @@ class SupabaseService {
     required String password,
     String? fullName,
     String? phone,
+    String? email,
     String? birthDate,
   }) async {
     try {
@@ -88,6 +89,7 @@ class SupabaseService {
             'password': password,
             'full_name': fullName,
             'phone': phone,
+            'email': email,
             'birth_date': birthDate,
           })
           .select()

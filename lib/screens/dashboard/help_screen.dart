@@ -164,7 +164,7 @@ class HelpScreen extends StatelessWidget {
             _buildInfoCard(
               icon: Icons.info_outline,
               title: 'เวอร์ชัน',
-              value: 'v1.0.0',
+              value: 'v1.1.0',
             ),
             _buildInfoCard(
               icon: Icons.shield_outlined,

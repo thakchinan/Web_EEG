@@ -21,6 +21,7 @@ class ApiService {
     required String password,
     String? fullName,
     String? phone,
+    String? email,
     String? birthDate,
   }) async {
     return SupabaseService.register(
@@ -28,6 +29,7 @@ class ApiService {
       password: password,
       fullName: fullName,
       phone: phone,
+      email: email,
       birthDate: birthDate,
     );
   }

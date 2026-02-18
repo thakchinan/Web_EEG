@@ -10,13 +10,13 @@ import 'services/rag_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Load environment variables
   await dotenv.load(fileName: ".env");
 
   // Initialize Supabase
   await SupabaseService.initialize();
-  
+
   // สร้าง embeddings สำหรับ knowledge base (ทำงานใน background)
   // จะสร้างเฉพาะ knowledge ที่ยังไม่มี embedding เท่านั้น
   RAGService.updateEmbeddings().then((result) {
@@ -26,7 +26,7 @@ void main() async {
   }).catchError((e) {
     debugPrint('⚠️ RAG: Could not update embeddings - $e');
   });
-  
+
   runApp(const MyApp());
 }
 
@@ -49,4 +49,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-``}
+}

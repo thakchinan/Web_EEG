@@ -14,6 +14,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _birthDateController = TextEditingController();
   bool _obscurePassword = true;
@@ -24,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _usernameController.dispose();
     _passwordController.dispose();
     _fullNameController.dispose();
+    _emailController.dispose();
     _phoneController.dispose();
     _birthDateController.dispose();
     super.dispose();
@@ -46,13 +48,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _register() async {
-    if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
-      _showError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+    if (_usernameController.text.isEmpty || _passwordController.text.isEmpty || _emailController.text.isEmpty) {
+      _showError('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
+
+    if (!_emailController.text.contains('@')) {
+      _showError('อีเมลต้องมีเครื่องหมาย @');
       return;
     }
 
     if (_passwordController.text.length < 6) {
       _showError('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+      return;
+    }
+
+    if (_phoneController.text.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(_phoneController.text)) {
+      _showError('เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักเท่านั้น');
       return;
     }
 
@@ -72,6 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       password: _passwordController.text,
       fullName: _fullNameController.text,
       phone: _phoneController.text,
+      email: _emailController.text,
       birthDate: birthDate,
     );
 
@@ -133,7 +146,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _buildLabel('ชื่อผู้ใช้งาน'),
             _buildTextField(
               controller: _usernameController,
-              hintText: 'example@example.com',
+              hintText: 'username',
+            ),
+            
+            const SizedBox(height: 16),
+
+            // Email Field
+            _buildLabel('อีเมล'),
+            _buildTextField(
+              controller: _emailController,
+              hintText: 'example@email.com',
+              keyboardType: TextInputType.emailAddress,
             ),
             
             const SizedBox(height: 16),
@@ -170,8 +193,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _buildLabel('เบอร์โทรศัพท์'),
             _buildTextField(
               controller: _phoneController,
-              hintText: 'example@example.com',
+              hintText: '0xxxxxxxxx',
               keyboardType: TextInputType.phone,
+              maxLength: 10,
             ),
             
             const SizedBox(height: 16),
@@ -289,12 +313,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool obscureText = false,
     Widget? suffixIcon,
     TextInputType? keyboardType,
+    int? maxLength,
   }) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      maxLength: maxLength,
       decoration: InputDecoration(
+        counterText: '',
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.grey[400]),
         filled: true,

@@ -211,6 +211,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _updateProfile() async {
+    if (!_emailController.text.contains('@')) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('อีเมลต้องมีเครื่องหมาย @'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    if (_phoneController.text.length != 10 ||
+        !RegExp(r'^[0-9]+$').hasMatch(_phoneController.text)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักเท่านั้น'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     // อัปโหลดรูปก่อน (ถ้ามีรูปใหม่)
@@ -390,8 +415,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             _buildLabel('เบอร์โทรศัพท์'),
             _buildTextField(
               controller: _phoneController,
-              hintText: '+66 XX XXX XXXX',
+              hintText: '0xxxxxxxxx',
               keyboardType: TextInputType.phone,
+              maxLength: 10,
             ),
 
             const SizedBox(height: 16),
@@ -500,11 +526,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     required TextEditingController controller,
     required String hintText,
     TextInputType? keyboardType,
+    int? maxLength,
   }) {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
+      maxLength: maxLength,
       decoration: InputDecoration(
+        counterText: '',
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.grey[400]),
         filled: true,
